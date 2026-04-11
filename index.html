@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DeepLearn.ai — Master Deep Learning</title>
+  <link rel="stylesheet" href="css/main.css"/>
+  <link rel="stylesheet" href="css/auth.css"/>
+  <link rel="stylesheet" href="css/viz.css"/>
+  <link rel="stylesheet" href="css/quiz.css"/>
+  <link rel="stylesheet" href="css/diffex.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- ══════════════════ AUTH SCREEN ══════════════════ -->
+<div id="auth-screen" class="auth-overlay">
+  <div class="auth-card">
+    <div class="auth-logo">deep<span>learn</span>.ai</div>
+    <div class="auth-sub">Master deep learning, one algorithm at a time</div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-signin" onclick="switchAuthTab('signin')">Sign in</button>
+      <button class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">Create account</button>
+    </div>
+    <div id="auth-err" class="auth-err"></div>
+    <div id="signin-form">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" id="si-email" type="email" placeholder="you@example.com" onkeydown="if(event.key==='Enter')doSignIn()"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" id="si-pass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doSignIn()"/>
+      </div>
+      <button class="auth-btn" onclick="doSignIn()">Sign in</button>
+      <div class="auth-divider">or</div>
+      <button class="oauth-btn" onclick="doDemo()">▶ Continue as demo user</button>
+      <div class="auth-hint">Demo: any email + password "demo123"</div>
+    </div>
+    <div id="signup-form" style="display:none">
+      <div class="form-group">
+        <label class="form-label">Display name</label>
+        <input class="form-input" id="su-name" type="text" placeholder="Your name"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" id="su-email" type="email" placeholder="you@example.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" id="su-pass" type="password" placeholder="Min 8 characters" oninput="checkStrength(this.value)"/>
+        <div class="strength-bar"><div id="strength-fill" class="strength-fill"></div></div>
+        <div id="strength-lbl" style="font-size:10px;color:var(--mut);font-family:var(--mono);margin-top:3px"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Experience level</label>
+        <select class="form-input" id="su-level">
+          <option value="beginner">Complete beginner</option>
+          <option value="intermediate" selected>Developer with Python</option>
+          <option value="advanced">University / Research</option>
+        </select>
+      </div>
+      <button class="auth-btn" onclick="doSignUp()">Create account</button>
+      <div class="auth-hint">Progress saved locally across sessions</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ MAIN APP ══════════════════ -->
+<div id="main-app" style="display:none" class="app">
+  <div class="topbar">
+    <div class="logo">deep<span>learn</span>.ai</div>
+    <nav class="nav-tabs">
+      <button class="nav-tab active" onclick="showPage('viz')">Visualizer</button>
+      <button class="nav-tab" onclick="showPage('diffex')">Diffusion Lab</button>
+      <button class="nav-tab" onclick="showPage('quiz')">Quiz</button>
+      <button class="nav-tab" onclick="showPage('lb')">Leaderboard</button>
+      <button class="nav-tab" onclick="showPage('progress')">Progress</button>
+      <button class="nav-tab" onclick="showPage('profile')">Profile</button>
+    </nav>
+    <div class="user-pill" onclick="toggleUserMenu()">
+      <div class="user-av" id="topbar-av">?</div>
+      <div>
+        <div class="user-name" id="topbar-name">User</div>
+        <div class="user-xp" id="topbar-xp">0 XP</div>
+      </div>
+      <span style="font-size:10px;color:var(--mut)">▾</span>
+      <div class="user-menu" id="user-menu">
+        <div class="um-item" onclick="showPage('profile')">⚙ Profile &amp; settings</div>
+        <div class="um-item" onclick="showPage('progress')">📈 My progress</div>
+        <div class="um-sep"></div>
+        <div class="um-item danger" onclick="doSignOut()">← Sign out</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sb-sec">
+        <div class="sb-lbl">Algorithms</div>
+        <button class="sb-item" id="sb-backprop" onclick="setAlgo('backprop');showPage('viz')"><div class="sb-icon" style="background:#7c6bff22">↩</div>Backpropagation</button>
+        <button class="sb-item" id="sb-attn"     onclick="setAlgo('attn');showPage('viz')"><div class="sb-icon" style="background:#ff6b9d22">◈</div>Attention</button>
+        <button class="sb-item" id="sb-gd"       onclick="setAlgo('gd');showPage('viz')"><div class="sb-icon" style="background:#00d4aa22">↘</div>Gradient Descent</button>
+        <button class="sb-item" id="sb-cnn"      onclick="setAlgo('cnn');showPage('viz')"><div class="sb-icon" style="background:#ffa94d22">⊞</div>CNN</button>
+        <button class="sb-item" id="sb-tfm"      onclick="setAlgo('tfm');showPage('viz')"><div class="sb-icon" style="background:#00d4aa22">⚡</div>Transformer</button>
+        <button class="sb-item" id="sb-rnn"      onclick="setAlgo('rnn');showPage('viz')"><div class="sb-icon" style="background:#e040fb22">↻</div>RNN / LSTM</button>
+        <button class="sb-item active" id="sb-diff" onclick="setAlgo('diff');showPage('viz')"><div class="sb-icon" style="background:#ff6b9d22">~</div>Diffusion</button>
+      </div>
+      <div class="sb-sec">
+        <div class="sb-lbl">Exercises</div>
+        <button class="sb-item" onclick="showPage('diffex')"><div class="sb-icon" style="background:#ff6b9d22">~</div>Diffusion Lab<span class="bnew">NEW</span></button>
+      </div>
+      <div class="sb-sec">
+        <div class="sb-lbl">Learn</div>
+        <button class="sb-item" onclick="showPage('quiz')"><div class="sb-icon" style="background:#7c6bff22">?</div>Quiz hub</button>
+        <button class="sb-item" onclick="showPage('lb')"><div class="sb-icon" style="background:#ffa94d22">🏆</div>Leaderboard</button>
+        <button class="sb-item" onclick="showPage('progress')"><div class="sb-icon" style="background:#7c6bff22">▣</div>My progress</button>
+      </div>
+    </aside>
+
+    <!-- PAGE CONTENT -->
+    <main class="content">
+      <div id="page-viz"><!-- injected by viz.js --></div>
+      <div id="page-diffex" style="display:none"><!-- injected by diffex.js --></div>
+      <div id="page-quiz"   style="display:none"><!-- injected by quiz.js --></div>
+      <div id="page-lb"     style="display:none"><!-- injected by leaderboard.js --></div>
+      <div id="page-progress" style="display:none"><!-- injected by progress.js --></div>
+      <div id="page-profile"  style="display:none"><!-- injected by profile.js --></div>
+    </main>
+  </div>
+</div>
+
+<!-- JS modules (load order matters) -->
+<script src="js/db.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script src="js/diffusion.js"></script>
+<script src="js/viz.js"></script>
+<script src="js/diffex.js"></script>
+<script src="js/quiz.js"></script>
+<script src="js/leaderboard.js"></script>
+<script src="js/progress.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/init.js"></script>
+</body>
+</html>

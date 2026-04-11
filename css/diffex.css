@@ -1,0 +1,15 @@
+/* diffex.css — additional exercise styles (extend as needed) */
+.diff-formula {
+  background: var(--cbg);
+  border: 1px solid var(--bdr);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.8;
+  margin: 8px 0;
+  color: var(--acc3);
+}
+.theory-section { font-size: 12px; line-height: 1.8; color: var(--mut); }
+.theory-section p { margin-bottom: 8px; }
+.theory-section strong { color: var(--acc); }
