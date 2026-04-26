@@ -16,6 +16,7 @@ A full-featured interactive deep learning education platform built with vanilla 
 
 ### Option 1 — Open directly (Chrome/Firefox)
 - Email: https://muhammadsuffian.github.io/deeplearn.ai/
+  
 Most browsers allow file:// access. If visualizations don't render, use Option 2.
 
 ### Option 2 — Local server (recommended)
